@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+:root.dark-colorful {
+  color-scheme: dark;
+  --back-bg: #9f67b4;
+  --body-bg: #2f384c;
+  --question-bg: #040994;
+  --reponse-bg: #6d72fb;
+  --good-reponse-bg: #07bb38;
+  --bad-reponse-bg: #d1051d;
+  --text_bg: #fff;
+}
+
+body {
+  background-color: var(--back-bg);
+  display: flex;
+  flex-flow: row wrap;
+  min-height: 100vh;
+  margin: 0px;
+  text-align: center;
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-family: -apple-system-font, BlinkMacSystemFont, "Helvetica Neue",
+    sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+body > * {
+  flex: 1 100%;
+}
+
+.main {
+  margin: 10px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+@media all and (min-width: 800px) and (orientation: landscape) {
+  .aside {
+    flex: 1 0 0;
+  }
+  .main {
+    flex: 4 0;
+  }
+}
+
+.main {
+  margin: 10px;
+  margin-bottom: 5px;
+  text-align: left;
+  background-color: var(--back-bg);
+}
+
+#aside {
+  background: var(--body-bg);
+}
+
+#content {
+  min-height: calc(100vh - 270px - 2.2em);
+  background: var(--body-bg);
+  padding: 10px;
+  position: relative;
+  border-radius: 10px;
+  z-index: 1;
+}

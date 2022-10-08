@@ -1,6 +1,8 @@
 import react from "react";
 
 interface ChoiceProps {
+  isDisabledAllButtonProps: boolean;
+  isBadResponseProps: boolean;
   isGoodResponseProps: boolean;
   onClickProps: () => void;
   value: string;
@@ -10,11 +12,21 @@ interface ChoiceProps {
 }
 
 function Choice(props: ChoiceProps) {
+  function getClassName() {
+    if (props.isGoodResponseProps) {
+      return "choice good bubbly-button animate";
+    } else if (props.isBadResponseProps) {
+      return "choice bad";
+    } else if (props.isDisabledAllButtonProps) {
+      return "choice disabled";
+    }
+    return "choice";
+  }
   return (
     <button
-      className={props.isGoodResponseProps ? "choice good" : "choice"}
+      className={getClassName()}
       onClick={props.onClickProps}
-      disabled={props.isDisabled}
+      disabled={props.isDisabled || props.isDisabledAllButtonProps}
     >
       {props.value}
     </button>

@@ -1,65 +1,122 @@
-import react, { useState, useContext } from "react";
+import react, { useState, useEffect } from "react";
 import "../css/game.css";
 import Board from "./Board";
-import { MyGlobalContext, MyQuizzContext } from "../Context/gameContext";
+import { dataQuizzQuestions, dataQuizzResponses } from "../Data/data";
+import { globalContent } from "../Data/info";
+import Choice from "./Choice";
+import ResultPanel from "./ResultPanel";
 
 function Game() {
-  const { score, setScore } = useContext(MyGlobalContext);
-  const { quizzQuestions } = useContext(MyQuizzContext);
-  const { quizzResponses } = useContext(MyQuizzContext);
-  const [isDisabledChoiceArrayState, setIsDisabledChoiceArrayState] = useState<
-    boolean[]
-  >([false, false, false, false]);
-  const [isGoodResponseArrayState, setIsGoodResponseArrayState] = useState<
-    boolean[]
-  >([false, false, false, false]);
+  //use dtate
+  const [isDisabledAllButtonState, setIsDisabledAllButtonState] =
+    useState<boolean>(false);
+  const [globalContentState, setGlobalContentState] =
+    useState<any>(globalContent);
+  const quizzResponses = dataQuizzResponses;
+  const [quizzObjectState, setQuizzObjectState] =
+    useState<any>(dataQuizzQuestions);
 
-  function getReponseFromId(id: number) {
-    let reponseNumber = -1;
-    quizzResponses?.map((response) => {
-      if (id == response.id) {
-        reponseNumber = response.response;
-      }
-    });
-    return reponseNumber;
+  function updateScore() {
+    setTimeout(() => {
+      setGlobalContentState((globalContentState: any) => ({
+        ...globalContentState,
+        score: globalContentState.score + 1,
+      }));
+      setIsDisabledAllButtonState(false);
+    }, 700);
   }
 
-  function disableChoice(id: number) {
-    let reponseNumber = -1;
-    quizzResponses?.map((response) => {
-      if (id == response.id) {
-        reponseNumber = response.response;
-      }
-    });
-    return reponseNumber;
+  function updateTryLeft() {
+    setGlobalContentState((globalContentState: any) => ({
+      ...globalContentState,
+      tryLeft: globalContentState.tryLeft - 1,
+    }));
   }
 
-  function handleClick(choice: number, id: number) {
-    //check in quizzReponse[score] if
-    if (getReponseFromId(id) == choice + 1) {
-      let isGoodResponseArrayStateCopy = isGoodResponseArrayState;
-      isGoodResponseArrayStateCopy[choice] = true;
-      setIsGoodResponseArrayState([...isGoodResponseArrayStateCopy]);
+  function goodAnswer(indexButton: number) {
+    quizzObjectState[globalContentState.score as number].choices[
+      indexButton
+    ].isFound = true;
+    setQuizzObjectState((quizzObjectState: any) => ({
+      ...quizzObjectState,
+    }));
+    setIsDisabledAllButtonState(true);
+    updateScore();
+  }
+
+  function badAnswer(indexButton: number) {
+    quizzObjectState[globalContentState.score as number].choices[
+      indexButton
+    ].isBad = true;
+    quizzObjectState[globalContentState.score as number].choices[
+      indexButton
+    ].isBad = true;
+    quizzObjectState[globalContentState.score as number].choices[
+      indexButton
+    ].isDisabled = true;
+    setQuizzObjectState((quizzObjectState: any) => ({
+      ...quizzObjectState,
+    }));
+    updateTryLeft();
+  }
+
+  function handleClick(event: any, indexButton: number, idQuestion: number) {
+    const goodResponse = quizzResponses.find(
+      (element) => element.id === idQuestion
+    );
+    /* if is good answer */
+    if (goodResponse?.response == indexButton + 1) {
+      goodAnswer(indexButton);
+      /* else is bad answer */
     } else {
-      let isDisabledChoiceArrayStateCopy = isDisabledChoiceArrayState;
-      isDisabledChoiceArrayStateCopy[choice] = true;
-      setIsDisabledChoiceArrayState([...isDisabledChoiceArrayStateCopy]);
+      badAnswer(indexButton);
     }
   }
 
+  useEffect(() => {
+    // set gameOver state if tryLeft <= 0
+    if (globalContentState.tryLeft <= 0 && !globalContentState.gameOver) {
+      setGlobalContentState((globalContentState: any) => ({
+        ...globalContentState,
+        gameOver: true,
+      }));
+      setIsDisabledAllButtonState(true);
+      console.log("gameOver");
+    }
+    // set win if score == nvrQuestion (game is finish and player win)
+    if (
+      globalContentState.score >= globalContentState.totalQuestion &&
+      !globalContentState.win
+    ) {
+      setGlobalContentState((globalContentState: any) => ({
+        ...globalContentState,
+        win: true,
+      }));
+    }
+  });
+
   return (
-    console.log("rerender"),
-    (
-      <div id="content" className="Game">
+    <div id="content" className="Game">
+      {!globalContentState.win &&
+      !globalContentState.gameOver &&
+      quizzObjectState[globalContentState.score as number] ? (
         <Board
-          onClickProps={(indexChoice: number, id: number) =>
-            handleClick(indexChoice, id)
+          onClickProps={(event: any, indexChoice: number, id: number) =>
+            handleClick(event, indexChoice, id)
           }
-          isDisabledChoiceArrayProps={isDisabledChoiceArrayState}
-          isGoodResponseArrayProps={isGoodResponseArrayState}
+          quizzObjectProps={
+            quizzObjectState[globalContentState.score as number]
+          }
+          isDisabledAllButtonProps={isDisabledAllButtonState}
         />
-      </div>
-    )
+      ) : (
+        <ResultPanel
+          win={globalContentState.win}
+          score={globalContentState.score}
+          nbrQuestion={globalContentState.totalQuestion}
+        />
+      )}
+    </div>
   );
 }
 

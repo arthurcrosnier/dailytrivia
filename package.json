@@ -1,6 +1,10 @@
 {
   "name": "dailytrivia",
+  "description": "A daily Trivia Game !",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.13.1"
+  },
   "main": "",
   "scripts": {
     "start": "npm start --prefix server",

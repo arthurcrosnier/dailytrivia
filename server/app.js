@@ -1,8 +1,8 @@
 const express = require("express");
-const helper = require("./src/helper/helper.js");
+const helper = require("./server/src/helper/helper.js");
 const bodyParser = require("body-parser");
 const favicon = require("serve-favicon");
-const sequelize = require("./src/db/sequelize");
+const sequelize = require("./server/src/db/sequelize");
 
 const app = express();
 const port = process.env.PORT || 3000;

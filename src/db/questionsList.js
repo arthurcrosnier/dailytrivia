@@ -1,0 +1,40 @@
+const questions = [
+  {
+    id: 1,
+    difficulty: 1,
+    good_answer: 2,
+    question: "question 1",
+    reponse1: "reponse1",
+    reponse2: "reponse2",
+    reponse3: "reponse3",
+    reponse4: "reponse4",
+    themes: ["Histoire"],
+    created: new Date(),
+  },
+  {
+    id: 2,
+    difficulty: 3,
+    good_answer: 1,
+    question: "question 2",
+    reponse1: "reponse1",
+    reponse2: "reponse2",
+    reponse3: "reponse3",
+    reponse4: "reponse4",
+    themes: ["Autre"],
+    created: new Date(),
+  },
+  {
+    id: 1,
+    difficulty: 2,
+    good_answer: 3,
+    question: "question 3",
+    reponse1: "reponse1",
+    reponse2: "reponse2",
+    reponse3: "reponse3",
+    reponse4: "reponse4",
+    themes: ["Géographie"],
+    created: new Date(),
+  },
+];
+
+module.exports = questions;

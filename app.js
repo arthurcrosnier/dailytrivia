@@ -6,22 +6,23 @@ const sequelize = require("./src/db/sequelize");
 
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(favicon(__dirname + "/favicon.ico")).use(bodyParser.json());
+app.use(favicon(__dirname + "/favicon.ico")); // use(bodyParser.json()
 
-sequelize.initDb();
+//sequelize.initDb();
 
 app.get("/", (req, res) => {
-  res.json("Hello, Heroku !");
+  res.json("Hello, world !");
 });
-//error code
 
 //route below
-require("./src/routes/findAllPokemons")(app);
+require("./src/routes/opendbapi")(app);
+//require("./src/routes/openaiQuestionFinder")(app, "géographie", "difficile");
+/*require("./src/routes/findAllPokemons")(app);
 require("./src/routes/findPokemonByPk")(app);
 require("./src/routes/createPokemon")(app);
 require("./src/routes/updatePokemon")(app);
 require("./src/routes/deletePokemon")(app);
-
+*/
 // routes 404.
 app.use(({ res }) => {
   const message =

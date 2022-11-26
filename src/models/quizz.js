@@ -7,9 +7,12 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      date_affichage: {
-        type: DataTypes.DATE,
-        allowNull: true,
+      language: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+      },
+      is_active: {
+        type: DataTypes.BOOLEAN,
       },
       id_statistique: {
         type: DataTypes.INTEGER,

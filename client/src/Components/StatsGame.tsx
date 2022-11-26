@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "../css/game.css";
 
 function StatsGame() {

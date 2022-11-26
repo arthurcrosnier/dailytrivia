@@ -1,5 +1,4 @@
 const { Configuration, OpenAIApi } = require("openai");
-const { Trivia } = require("../db/sequelize");
 
 module.exports = (app, theme, difficulty) => {
   const configuration = new Configuration({
@@ -36,21 +35,6 @@ module.exports = (app, theme, difficulty) => {
     }
   });
 };
-
-function addDb(obj) {
-  for (const [key, value] of Object.entries(obj)) {
-    Trivia.create({
-      question: questionList.question,
-      reponse1: questionList.reponse1,
-      reponse2: questionList.reponse2,
-      reponse3: questionList.reponse3,
-      reponse4: questionList.reponse4,
-      good_answer: questionList.good_answer,
-      difficulty: questionList.difficulty,
-      themes: questionList.themes,
-    });
-  }
-}
 
 function resultToObject(result, theme, difficulty) {
   let finalResult = [];

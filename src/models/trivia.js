@@ -1,11 +1,11 @@
 const validThemes = [
-  "Divertissement",
-  "Sciences et Nature",
-  "Sports et Loisirs",
-  "Histoire",
-  "Géographie",
-  "Arts et Littérature",
-  "Autre",
+  "entertainment",
+  "science",
+  "sport",
+  "history",
+  "geography",
+  "art",
+  "other",
 ];
 
 const validDifficulty = [1, 2, 3];
@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
             }
           },
         },
+      },
+      language: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
       },
       used_in_quizz: {
         type: DataTypes.BOOLEAN,
@@ -131,6 +135,9 @@ module.exports = (sequelize, DataTypes) => {
           return this.getDataValue("themes").split(",");
         },
         set(themes) {
+          if (!Array.isArray(themes)) {
+            themes = [themes];
+          }
           this.setDataValue("themes", themes.join());
         },
         validate: {

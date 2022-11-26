@@ -11,22 +11,19 @@ app.use(favicon(__dirname + "/favicon.ico")); // use(bodyParser.json()
 //sequelize.initDb();
 
 app.get("/", (req, res) => {
-  res.json("Hello, world !");
+  res.json("Hello, Trivia !");
 });
 
 //route below
 require("./src/routes/opendbapi")(app);
-//require("./src/routes/openaiQuestionFinder")(app, "géographie", "difficile");
-/*require("./src/routes/findAllPokemons")(app);
-require("./src/routes/findPokemonByPk")(app);
-require("./src/routes/createPokemon")(app);
-require("./src/routes/updatePokemon")(app);
-require("./src/routes/deletePokemon")(app);
-*/
+require("./src/routes/createQuizz")(app);
+require("./src/routes/findActiveQuizz")(app);
+require("./src/routes/findIsGoodResponse")(app);
+require("./src/routes/openquizzdbapi")(app);
+require("./src/routes/openquizzdbapilistids")(app);
 // routes 404.
 app.use(({ res }) => {
-  const message =
-    "Impossible de trouver la ressource demandée ! Vous pouvez essayer une autre URL.";
+  const message = "Route not found.";
   res.status(404).json({ message });
 });
 

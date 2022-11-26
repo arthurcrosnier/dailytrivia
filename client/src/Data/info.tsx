@@ -1,5 +1,3 @@
-import React from "react";
-
 let globalContent: {
   score: number;
   totalQuestion: number;
@@ -9,7 +7,7 @@ let globalContent: {
   win: boolean;
 } = {
   score: 0,
-  totalQuestion: 2,
+  totalQuestion: 7,
   tryLeft: 3,
   userId: 0,
   gameOver: false,

@@ -1,20 +1,19 @@
-import react, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "../css/game.css";
 import Board from "./Board";
-import { dataQuizzQuestions, dataQuizzResponses } from "../Data/data";
 import { globalContent } from "../Data/info";
-import Choice from "./Choice";
 import ResultPanel from "./ResultPanel";
+import ModalEnter from "./ModalEnter";
+import { fetchDataTrivias, fetchResponseTrivia } from "../services/requestSend";
 
 function Game() {
-  //use dtate
+  // declare the states
+  const [startState, setStartState] = useState<boolean>(false);
   const [isDisabledAllButtonState, setIsDisabledAllButtonState] =
     useState<boolean>(false);
   const [globalContentState, setGlobalContentState] =
     useState<any>(globalContent);
-  const quizzResponses = dataQuizzResponses;
-  const [quizzObjectState, setQuizzObjectState] =
-    useState<any>(dataQuizzQuestions);
+  const [quizzObjectState, setQuizzObjectState] = useState<any>();
 
   function updateScore() {
     setTimeout(() => {
@@ -27,31 +26,33 @@ function Game() {
   }
 
   function updateTryLeft() {
-    setGlobalContentState((globalContentState: any) => ({
-      ...globalContentState,
-      tryLeft: globalContentState.tryLeft - 1,
-    }));
+    setTimeout(() => {
+      setGlobalContentState((globalContentState: any) => ({
+        ...globalContentState,
+        tryLeft: globalContentState.tryLeft - 1,
+      }));
+      setIsDisabledAllButtonState(false);
+    }, 700);
   }
 
   function goodAnswer(indexButton: number) {
-    quizzObjectState[globalContentState.score as number].choices[
+    quizzObjectState[globalContentState.score as number].reponses[
       indexButton
     ].isFound = true;
     setQuizzObjectState((quizzObjectState: any) => ({
       ...quizzObjectState,
     }));
-    setIsDisabledAllButtonState(true);
     updateScore();
   }
 
   function badAnswer(indexButton: number) {
-    quizzObjectState[globalContentState.score as number].choices[
+    quizzObjectState[globalContentState.score as number].reponses[
       indexButton
     ].isBad = true;
-    quizzObjectState[globalContentState.score as number].choices[
+    quizzObjectState[globalContentState.score as number].reponses[
       indexButton
     ].isBad = true;
-    quizzObjectState[globalContentState.score as number].choices[
+    quizzObjectState[globalContentState.score as number].reponses[
       indexButton
     ].isDisabled = true;
     setQuizzObjectState((quizzObjectState: any) => ({
@@ -60,19 +61,31 @@ function Game() {
     updateTryLeft();
   }
 
-  function handleClick(event: any, indexButton: number, idQuestion: number) {
-    const goodResponse = quizzResponses.find(
-      (element) => element.id === idQuestion
-    );
-    /* if is good answer */
-    if (goodResponse?.response == indexButton + 1) {
-      goodAnswer(indexButton);
-      /* else is bad answer */
-    } else {
-      badAnswer(indexButton);
+  //click on response button
+  async function reponseClick(indexButton: number, idQuestion: number) {
+    setIsDisabledAllButtonState(true);
+    try {
+      const ReponseTxt =
+        quizzObjectState[globalContentState.score as number].reponses[
+          indexButton
+        ].text;
+      const result = await fetchResponseTrivia(
+        idQuestion,
+        quizzObjectState[globalContentState.score as number].reponses[
+          indexButton
+        ].text
+      );
+      if (result.is_good_response == true) {
+        goodAnswer(indexButton);
+      } else {
+        badAnswer(indexButton);
+      }
+    } catch (err) {
+    } finally {
     }
   }
 
+  //win / lose state
   useEffect(() => {
     // set gameOver state if tryLeft <= 0
     if (globalContentState.tryLeft <= 0 && !globalContentState.gameOver) {
@@ -95,26 +108,54 @@ function Game() {
     }
   });
 
+  // fetch data and set states on start
+  const fetchAndSetDataTrivias = useCallback(async () => {
+    const results: any = await fetchDataTrivias();
+    setQuizzObjectState(results[0]);
+    setGlobalContentState((globalContentState: any) => ({
+      ...globalContentState,
+      totalQuestion: results[0].length,
+    }));
+  }, []);
+
+  useEffect(() => {
+    fetchAndSetDataTrivias().catch(console.error);
+  }, [fetchAndSetDataTrivias]);
+
+  // when user click on start game
+  function startClick() {
+    if (quizzObjectState) {
+      setStartState(true);
+    }
+  }
+
+  const statsScore = [20, 10, 50, 30, 52, 65, 54];
   return (
     <div id="content" className="Game">
-      {!globalContentState.win &&
-      !globalContentState.gameOver &&
-      quizzObjectState[globalContentState.score as number] ? (
-        <Board
-          onClickProps={(event: any, indexChoice: number, id: number) =>
-            handleClick(event, indexChoice, id)
-          }
-          quizzObjectProps={
-            quizzObjectState[globalContentState.score as number]
-          }
-          isDisabledAllButtonProps={isDisabledAllButtonState}
-        />
+      {quizzObjectState && startState ? (
+        !globalContentState.win &&
+        !globalContentState.gameOver &&
+        quizzObjectState[globalContentState.score as number] ? (
+          <Board
+            onClickReponseProps={(indexChoice: number, id: number) =>
+              reponseClick(indexChoice, id)
+            }
+            quizzObjectProps={
+              quizzObjectState[globalContentState.score as number]
+            }
+            isDisabledAllButtonProps={isDisabledAllButtonState}
+            globalContentProps={globalContentState}
+          />
+        ) : (
+          <ResultPanel
+            win={globalContentState.win}
+            score={globalContentState.score}
+            nbrQuestion={globalContentState.totalQuestion}
+            scoreStatsToday={statsScore}
+          />
+        )
       ) : (
-        <ResultPanel
-          win={globalContentState.win}
-          score={globalContentState.score}
-          nbrQuestion={globalContentState.totalQuestion}
-        />
+        <ModalEnter start={startState} startClick={() => startClick()} />
       )}
     </div>
   );

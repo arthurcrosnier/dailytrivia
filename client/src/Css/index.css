@@ -1,26 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root,
 :root.dark-colorful {
   color-scheme: dark;
-  --back-bg: #9f67b4;
-  --body-bg: #2f384c;
-  --question-bg: #040994;
-  --reponse-bg: #6d72fb;
+  /* trivia color below*/
+  --sizzling-sunrise: #fad900;
+  --maximum-purple: #7e388e;
+  --carolina-blue: #069ad8;
+  --space-cadet: #1b1f42;
+  --carrot-orange: #f59527;
+  --green-pantone: #46a53d;
+  --medium-violet-red: #d00d87;
   --good-reponse-bg: #07bb38;
-  --bad-reponse-bg: #d1051d;
+  --bad-reponse-bg: #ff0b0b;
   --disabled-bg: #79686a;
-  --text_bg: #fff;
+  --bg1: #94f2e1;
+  --bg2: #18b6b2;
+  --bg3: #793699;
+  --bg4: #455f7e;
 }
 
 body {
-  background-color: var(--back-bg);
-  display: flex;
+  margin: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-image: url(/skybg.png) !important;
   flex-flow: row wrap;
   min-height: 100vh;
-  margin: 0px;
   text-align: center;
   -webkit-font-smoothing: subpixel-antialiased;
   font-family: -apple-system-font, BlinkMacSystemFont, "Helvetica Neue",
@@ -33,7 +37,6 @@ body > * {
 }
 
 .main {
-  margin: 10px;
   margin-bottom: 5px;
   text-align: left;
 }
@@ -47,22 +50,101 @@ body > * {
   }
 }
 
-.main {
-  margin: 10px;
-  margin-bottom: 5px;
-  text-align: left;
-  background-color: var(--back-bg);
-}
-
 #aside {
-  background: var(--body-bg);
+  background: linear-gradient(var(--bg1), var(--bg4));
 }
 
 #content {
   min-height: calc(100vh - 270px - 2.2em);
-  background: var(--body-bg);
-  padding: 10px;
   position: relative;
-  border-radius: 10px;
   z-index: 1;
+}
+
+a,
+abbr,
+acronym,
+address,
+applet,
+article,
+aside,
+audio,
+b,
+big,
+blockquote,
+body,
+canvas,
+caption,
+center,
+cite,
+code,
+dd,
+del,
+details,
+dfn,
+div,
+dl,
+dt,
+em,
+embed,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+hgroup,
+html,
+i,
+iframe,
+img,
+ins,
+kbd,
+label,
+legend,
+li,
+mark,
+menu,
+nav,
+object,
+ol,
+output,
+p,
+pre,
+q,
+ruby,
+s,
+samp,
+section,
+small,
+span,
+strike,
+strong,
+sub,
+summary,
+sup,
+table,
+tbody,
+td,
+tfoot,
+th,
+thead,
+time,
+tr,
+tt,
+u,
+ul,
+var,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }

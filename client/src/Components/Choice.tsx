@@ -1,10 +1,8 @@
-import react from "react";
-
 interface ChoiceProps {
   isDisabledAllButtonProps: boolean;
   isBadResponseProps: boolean;
   isGoodResponseProps: boolean;
-  onClickProps: () => void;
+  onClickReponseProps: () => void;
   value: string;
   key: number;
   id: number;
@@ -25,7 +23,7 @@ function Choice(props: ChoiceProps) {
   return (
     <button
       className={getClassName()}
-      onClick={props.onClickProps}
+      onClick={props.onClickReponseProps}
       disabled={props.isDisabled || props.isDisabledAllButtonProps}
     >
       {props.value}

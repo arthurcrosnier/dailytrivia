@@ -1,5 +1,3 @@
-import react from "react";
-
 interface QuestionProps {
   value: string;
 }

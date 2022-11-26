@@ -1,20 +1,22 @@
-import { useContext } from "react";
 import Choice from "./Choice";
 import Question from "./Question";
+import InfoQuestionQuizz from "./InfoQuestionQuizz";
 
 interface BoardProps {
-  onClickProps: (event: any, indexChoice: number, id: number) => void;
+  onClickReponseProps: (indexChoice: number, id: number) => void;
   quizzObjectProps: {
-    id: number;
+    id_trivia: number;
     question: string;
-    choices: Array<object>;
+    reponses: Array<object>;
+    theme: string;
   };
   isDisabledAllButtonProps: boolean;
+  globalContentProps: object;
 }
 
 function Board(props: BoardProps) {
   function getChoices() {
-    return props.quizzObjectProps.choices.map((choice: any, index) => {
+    return props.quizzObjectProps.reponses.map((choice: any, index: number) => {
       return (
         <Choice
           isBadResponseProps={choice.isBad}
@@ -23,9 +25,12 @@ function Board(props: BoardProps) {
           isDisabledAllButtonProps={props.isDisabledAllButtonProps}
           value={choice.text}
           key={index}
-          id={props.quizzObjectProps.id}
-          onClickProps={() => {
-            return props.onClickProps(event, index, props.quizzObjectProps.id);
+          id={choice.id_trivia}
+          onClickReponseProps={() => {
+            return props.onClickReponseProps(
+              index,
+              props.quizzObjectProps.id_trivia
+            );
           }}
         />
       );
@@ -34,6 +39,10 @@ function Board(props: BoardProps) {
 
   return (
     <div className="board">
+      <InfoQuestionQuizz
+        themeProps={props.quizzObjectProps.theme}
+        globalContentProps={props.globalContentProps}
+      />
       <Question value={props.quizzObjectProps.question} />
       <div className="container_response">{getChoices()}</div>
     </div>
